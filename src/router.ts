@@ -1,13 +1,12 @@
+type Handler = (request: Request) => Response | Promise<Response>;
+
 export interface Route {
 	'method': string[];
 	'pattern': URLPattern;
-	'handler': (request: Request) => Response | Promise<Response>;
+	'handler': Handler;
 }
 
-export default function route(
-	routes: Route[],
-	fallback: (request: Request) => Response | Promise<Response>,
-): (request: Request) => Response | Promise<Response> {
+export default function route(routes: Route[], fallback: Handler): Handler {
 	return (request: Request) => {
 		for (const route of routes) {
 			const match = route.pattern.exec(request.url);
