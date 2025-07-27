@@ -1,5 +1,6 @@
 export interface Context {
 	'params': URLPatternResult;
+	'url': URL;
 }
 
 type BaseHandler = (request: Request) => Response | Promise<Response>;
@@ -19,6 +20,7 @@ export default function route(routes: Route[], fallback: BaseHandler): BaseHandl
 			if (match && route.method.includes(request.method)) {
 				return route.handler(request, {
 					'params': match,
+					'url': new URL(request.url),
 				});
 			}
 		}
