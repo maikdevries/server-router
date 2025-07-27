@@ -1,9 +1,9 @@
 type Handler = (request: Request) => Response | Promise<Response>;
 
 export interface Route {
+	'handler': Handler;
 	'method': string[];
 	'pattern': URLPattern;
-	'handler': Handler;
 }
 
 export default function route(routes: Route[], fallback: Handler): Handler {
