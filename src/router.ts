@@ -1,10 +1,10 @@
-type Context<C> = C & {
+type RouteContext<C> = C & {
 	'params': URLPatternResult;
 	'url': URL;
 };
 
 type BaseHandler = (request: Request) => Response | Promise<Response>;
-type Handler<C> = (request: Request, context: Context<C>) => Response | Promise<Response>;
+type Handler<C> = (request: Request, context: RouteContext<C>) => Response | Promise<Response>;
 
 export interface Route<C> {
 	'handler': Handler<C>;
