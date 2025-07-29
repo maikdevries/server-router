@@ -6,15 +6,15 @@ type RouteContext<C> = Override<C, {
 }>;
 
 type BaseHandler = (request: Request) => Response | Promise<Response>;
-type Handler<C> = (request: Request, context: RouteContext<C>) => Response | Promise<Response>;
+type Handler<C> = (request: Request, context: C) => Response | Promise<Response>;
 
 export interface Route<C> {
-	'handler': Handler<C>;
+	'handler': Handler<RouteContext<C>>;
 	'method': string[];
 	'pattern': URLPattern;
 }
 
-export default function route<C>(context: C, routes: Route<C>[], fallback: BaseHandler): BaseHandler {
+export default function route<C>(context: C, routes: Route<C>[], fallback: Handler<C>): BaseHandler {
 	return (request: Request) => {
 		for (const route of routes) {
 			const match = route.pattern.exec(request.url);
@@ -28,6 +28,6 @@ export default function route<C>(context: C, routes: Route<C>[], fallback: BaseH
 			}
 		}
 
-		return fallback(request);
+		return fallback(request, context);
 	};
 }
