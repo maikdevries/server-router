@@ -1,7 +1,9 @@
-type RouteContext<C> = C & {
+type Override<T, U> = Omit<T, keyof U> & U;
+
+type RouteContext<C> = Override<C, {
 	'params': URLPatternResult;
 	'url': URL;
-};
+}>;
 
 type BaseHandler = (request: Request) => Response | Promise<Response>;
 type Handler<C> = (request: Request, context: RouteContext<C>) => Response | Promise<Response>;
