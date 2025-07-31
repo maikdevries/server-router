@@ -1,4 +1,4 @@
-type Override<T, U> = Omit<T, keyof U> & U;
+import type { Override } from './types.ts';
 
 type RouteContext<C> = Override<C, {
 	'params': URLPatternResult;
@@ -6,7 +6,7 @@ type RouteContext<C> = Override<C, {
 }>;
 
 type BaseHandler = (request: Request) => Response | Promise<Response>;
-type Handler<C> = (request: Request, context: C) => Response | Promise<Response>;
+export type Handler<C> = (request: Request, context: C) => Response | Promise<Response>;
 
 export interface Route<C> {
 	'handler': Handler<RouteContext<C>>;
@@ -14,7 +14,7 @@ export interface Route<C> {
 	'pattern': URLPattern;
 }
 
-export default function route<C>(context: C, routes: Route<C>[], fallback: Handler<C>): BaseHandler {
+export function route<C>(context: C, routes: Route<C>[], fallback: Handler<C>): BaseHandler {
 	return (request: Request) => {
 		for (const route of routes) {
 			const match = route.pattern.exec(request.url);

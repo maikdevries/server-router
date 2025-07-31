@@ -1,0 +1,40 @@
+import type { Handler } from './router.ts';
+import type { Merge, Override, Reduce } from './types.ts';
+
+export type Empty = Record<never, never>;
+
+export type Middleware<R = Empty, P = Empty> = (
+	request: Request,
+	context: R,
+	next: Handler<Merge<R, P>>,
+) => Response | Promise<Response>;
+
+type Chain<R, P> = {
+	(request: Request, context: R, next: Handler<Merge<R, P>>): Response | Promise<Response>;
+
+	add<RS>(handler: Handler<RS>): Handler<Reduce<R, RS, P>>;
+	add<RS, PS>(middleware: Middleware<RS, PS>): Chain<Reduce<R, RS, P>, Merge<P, PS>>;
+};
+
+function compose<RF, PF, RS, PS>(
+	first: Middleware<RF, PF>,
+	second: Middleware<RS, PS> | Handler<RS>,
+): Middleware<Reduce<RF, RS, PF>, Merge<PF, PS>> {
+	return (request, context, next) => first(request, context, (r, c) => second(r, c, next));
+}
+
+export function chain<R>(handler: Handler<R>): Handler<R>;
+export function chain<R, P>(middleware: Middleware<R, P>): Chain<R, P>;
+export function chain<R, P>(middleware: Handler<R> | Middleware<R, P>): Handler<R> | Chain<R, P> {
+	const copy = middleware.bind(null);
+	copy.add = (m) => chain(compose(middleware, m));
+
+	return copy as Handler<R> | Chain<R, P>;
+}
+
+export function extendContext<T, S>(target: T, source: S): Override<T, S> {
+	return {
+		...target,
+		...source,
+	};
+}
