@@ -1,4 +1,7 @@
 {
+	"name": "@maikdevries/server-router",
+	"version": "0.1.0",
+	"exports": "./mod.ts",
 	"compilerOptions": {
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,
@@ -86,5 +89,13 @@
 				"recommended"
 			]
 		}
+	},
+	"publish": {
+		"include": [
+			"src/**/*.ts",
+			"LICENSE",
+			"mod.ts",
+			"README.md"
+		]
 	}
 }
