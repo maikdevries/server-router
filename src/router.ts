@@ -5,7 +5,6 @@ type RouteContext<C> = Override<C, {
 	'url': URL;
 }>;
 
-type BaseHandler = (request: Request) => Response | Promise<Response>;
 export type Handler<C> = (request: Request, context: C) => Response | Promise<Response>;
 
 export interface Route<C> {
@@ -14,8 +13,8 @@ export interface Route<C> {
 	'pattern': URLPattern;
 }
 
-export function route<C>(context: C, routes: Route<C>[], fallback: Handler<C>): BaseHandler {
-	return (request: Request) => {
+export function route<C>(routes: Route<C>[], fallback: Handler<C>): Handler<C> {
+	return (request: Request, context: C) => {
 		for (const route of routes) {
 			const match = route.pattern.exec(request.url);
 
