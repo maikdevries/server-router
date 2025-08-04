@@ -26,6 +26,7 @@ function compose<RF, PF, RS, PS>(
 
 export function chain<R>(handler: Handler<R>): Handler<R>;
 export function chain<R, P>(middleware: Middleware<R, P>): Chain<R, P>;
+// @ts-ignore: https://github.com/denoland/deno/issues/30285
 export function chain<R, P>(middleware: Handler<R> | Middleware<R, P>): Handler<R> | Chain<R, P> {
 	const copy = middleware.bind(null);
 
