@@ -1,3 +1,5 @@
+export type Empty = Record<never, never>;
+
 type Common<A, B> = {
 	[K in keyof A & keyof B]: B[K] extends never ? A[K] : B[K];
 };

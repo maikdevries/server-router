@@ -1,7 +1,5 @@
 import type { Handler } from './router.ts';
-import type { Merge, Reduce } from './types.ts';
-
-export type Empty = Record<never, never>;
+import type { Empty, Merge, Reduce } from './types.ts';
 
 export type Middleware<R = Empty, P = Empty> = (
 	request: Request,
