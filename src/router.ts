@@ -1,6 +1,6 @@
 import type { Override } from './types.ts';
 
-type RouteContext<C> = Override<C, {
+export type RouteContext<C> = Override<C, {
 	'params': URLPatternResult;
 	'url': URL;
 }>;
