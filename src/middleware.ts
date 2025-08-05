@@ -1,5 +1,5 @@
 import type { Handler } from './router.ts';
-import type { Merge, Override, Reduce } from './types.ts';
+import type { Merge, Reduce } from './types.ts';
 
 export type Empty = Record<never, never>;
 
@@ -34,11 +34,4 @@ export function chain<R, P>(middleware: Handler<R> | Middleware<R, P>): Handler<
 	copy.add = (m) => chain(compose(middleware, m));
 
 	return copy as Handler<R> | Chain<R, P>;
-}
-
-export function extendContext<T, S>(target: T, source: S): Override<T, S> {
-	return {
-		...target,
-		...source,
-	};
 }
