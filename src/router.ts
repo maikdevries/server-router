@@ -1,6 +1,6 @@
 import type { Empty, Override } from './types.ts';
 
-type Method = 'CONNECT' | 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'PATCH' | 'POST' | 'PUT' | 'TRACE';
+type Method = '*' | 'CONNECT' | 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'PATCH' | 'POST' | 'PUT' | 'TRACE';
 
 export type RouteContext<C> = Override<C, {
 	'params': URLPatternResult;
@@ -20,7 +20,7 @@ export function route<C = Empty>(routes: Route<C>[], fallback: Handler<C>): Hand
 		for (const route of routes) {
 			const match = route.pattern.exec(request.url);
 
-			if (match && route.method.includes(request.method as Method)) {
+			if (match && route.method.some((m) => m === request.method || m === '*')) {
 				return route.handler(request, {
 					...context,
 					'params': match,
