@@ -86,7 +86,8 @@
 				"verbatim-module-syntax"
 			],
 			"tags": [
-				"recommended"
+				"recommended",
+				"workspace"
 			]
 		}
 	},
