@@ -90,7 +90,7 @@ export function route<C = Empty>(routes: Route<C>[], fallback: Handler<C>): Hand
 		for (const route of routes) {
 			const match = route.pattern.exec(request.url);
 
-			if (match && route.method.some((m) => m === request.method || m === '*')) {
+			if (match && route.method.some((m) => m === '*' || m === request.method)) {
 				return route.handler(request, {
 					...context,
 					'params': match,
