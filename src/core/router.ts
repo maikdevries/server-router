@@ -1,7 +1,5 @@
 /**
  * An empty object type that accepts no properties.
- *
- * Equivalent to `{}` but explicit in intent.
  */
 export type Empty = Record<never, never>;
 
@@ -29,15 +27,19 @@ export type Method = '*' | 'CONNECT' | 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | '
  */
 export interface Route<C = Empty> {
 	/**
-	 * The handler that is called when the request matches the route.
+	 * The {@link Handler} that is called when the request matches the route.
 	 */
 	'handler': Handler<RouteContext<C>>;
 	/**
 	 * The HTTP methods the request method must match.
+	 *
+	 * @see {@link Method}
 	 */
 	'method': Method[];
 	/**
 	 * The route pattern the request URL must match.
+	 *
+	 * @see {@link URLPattern}
 	 */
 	'pattern': URLPattern;
 }
@@ -50,6 +52,8 @@ export interface Route<C = Empty> {
 export type RouteContext<C> = Override<C, {
 	/**
 	 * The results of matching the request URL to the route pattern.
+	 *
+	 * @see {@link URLPatternResult}
 	 */
 	'params': URLPatternResult;
 	/**
@@ -65,7 +69,7 @@ export type RouteContext<C> = Override<C, {
  *
  * @example Basic usage
  * ```ts
- * import { route, type RouteContext } from '@maikdevries/server-router';
+ * import { route, type RouteContext } from '@maikdevries/server-router/core';
  *
  * interface Context {
  * 	'uuid': string;

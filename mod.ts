@@ -28,4 +28,5 @@
  *
  * @module
  */
+
 export { route, type RouteContext } from '@self/core';
