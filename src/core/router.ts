@@ -18,9 +18,9 @@ type Override<A, B> = Omit<A, keyof B> & B;
 export type Handler<C = Empty> = (request: Request, context: C) => Response | Promise<Response>;
 
 /**
- * An HTTP request method with `'*'` serving as wildcard.
+ * An HTTP request method.
  */
-export type Method = '*' | 'CONNECT' | 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'PATCH' | 'POST' | 'PUT' | 'TRACE';
+export type Method = 'CONNECT' | 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'PATCH' | 'POST' | 'PUT' | 'TRACE';
 
 /**
  * A route definition that maps request properties to a request handler.
@@ -31,11 +31,11 @@ export interface Route<C = Empty> {
 	 */
 	'handler': Handler<RouteContext<C>>;
 	/**
-	 * The HTTP methods the request method must match.
+	 * The HTTP methods the request method must match, with `'*'` serving as wildcard.
 	 *
 	 * @see {@link Method}
 	 */
-	'method': Method[];
+	'method': '*' | Method[];
 	/**
 	 * The route pattern the request URL must match.
 	 *
@@ -94,7 +94,7 @@ export function route<C = Empty>(routes: Route<C>[], fallback: Handler<C>): Hand
 		for (const route of routes) {
 			const match = route.pattern.exec(request.url);
 
-			if (match && route.method.some((m) => m === '*' || m === request.method)) {
+			if (match && (route.method === '*' || route.method.some((m) => m === request.method))) {
 				return route.handler(request, {
 					...context,
 					'params': match,
